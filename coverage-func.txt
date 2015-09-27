@@ -1,0 +1,7 @@
+github.com/larsth/linescanner/linescanner.go:19:	Err		100.0%
+github.com/larsth/linescanner/linescanner.go:32:	Bytes		100.0%
+github.com/larsth/linescanner/linescanner.go:41:	Text		100.0%
+github.com/larsth/linescanner/new.go:17:		NewSize		100.0%
+github.com/larsth/linescanner/new.go:40:		New		100.0%
+github.com/larsth/linescanner/scan.go:3:		Scan		100.0%
+total:							(statements)	100.0%
