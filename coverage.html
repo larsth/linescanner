@@ -82,7 +82,7 @@
 		<div id="content">
 		
 		<pre class="file" id="file0" >//Package linescanner is a Go package which reads a line to the end of the line,
-// not including the end of line characters in he token (search word: golang)
+// not including the end of line characters in the token(line).
 package linescanner
 
 import (
@@ -94,9 +94,10 @@ import (
 //LineScanner is a scanner/lexical analyzer that reads a line from
 //an io.Reader.
 //The end of line characters \n or \r\n is not included in the line (token).
-//You should continously loop in a loop until the Scan() method return true, or
-//the LineScanner has an error (io.EOF is never returned) from Err() method).
-//Then the Scan() method returns true a result is available until Scan returns
+//You should continously loop in until the Scan() method returns true, or
+//the LineScanner has an error. Read the error via the Err() method, which never
+//returns io.EOF.
+//When the Scan() method returns true a result is available until Scan returns
 //true again.
 //The result can be read via the Text(), or Bytes() methods.
 //
@@ -162,17 +163,36 @@ import (
 )
 
 var (
-        ErrNilIoReader               = errors.New("Nil io.Reader")
-        ErrReaderCapacityLessThanOne = errors.New("Reader capacity &lt; 1")
-        ErrTokenCapacityLessThanOne  = errors.New("Token capacity &lt; 1")
+        //ErrNilIoReader is an error that tells the calling function that it is
+        //using an io.Reader, which is nil
+        ErrNilIoReader = errors.New("Nil io.Reader")
+
+        //ErrReaderCapacityLessThanOne is an error that tells the calling
+        //function that it is using a bufio.Reader capacity less than the
+        //bufio.Reader minimum capacity, which is 16 (according to the source code
+        //for the bufio.Reader.NewSize function).
+        ErrReaderCapacityLessThanOne = errors.New("Reader capacity &lt; 16")
+
+        //ErrTokenCapacityLessThanOne is an error that tells the calling
+        //function that it is using a token capacity &lt; 1
+        ErrTokenCapacityLessThanOne = errors.New("Token capacity &lt; 1")
+
+        //ErrBufferCapacityLessThanOne is an error that tells the calling
+        //function that it is using a buffer capacity &lt; 1
         ErrBufferCapacityLessThanOne = errors.New("Buffer capacity &lt; 1")
 )
 
+//NewSize creates a LineScanner and returns a pointer to it, if the provided
+//io.Redader is not nil, if the readerCapacity is &gt;= 16, if the token capacity
+// is &gt;= 1, and if te buffer capacity is &gt;= 1.
+//If the conditions are met, then the returned error is nil.
+//If the conditions are not met a nil *LineScanner pointer and an error != nil
+//are returned.
 func NewSize(r io.Reader, readerCapacity int, tokenCapacity int, bufferCapacity int) (ls *LineScanner, err error) <span class="cov10" title="16">{
         if r == nil </span><span class="cov3" title="2">{
                 return nil, ErrNilIoReader
         }</span>
-        <span class="cov9" title="14">if readerCapacity &lt; 1 </span><span class="cov1" title="1">{
+        <span class="cov9" title="14">if readerCapacity &lt; 16 </span><span class="cov1" title="1">{
                 return nil, ErrReaderCapacityLessThanOne
         }</span>
         <span class="cov9" title="13">if tokenCapacity &lt; 1 </span><span class="cov1" title="1">{
@@ -191,6 +211,13 @@ func NewSize(r io.Reader, readerCapacity int, tokenCapacity int, bufferCapacity 
         return ls, nil</span>
 }
 
+//New creates a LineScanner and returns a pointer to it, if the provided
+//io.Reader is not nil. If the provided io.Reader is not nil a nil error is also
+//returned.
+//If the io.Reader is nil, then a nil *Linescanner, and the ErrNilIoReader error
+//are returned.
+//All capacities (reader, token and buffer) will be set to os.Getpagesize,
+//which will usually return 4096 (=a page is 4 KiB).
 func New(r io.Reader) (ls *LineScanner, err error) <span class="cov7" title="7">{
         pageSize := os.Getpagesize()
         return NewSize(r, pageSize, pageSize, pageSize)
@@ -199,6 +226,15 @@ func New(r io.Reader) (ls *LineScanner, err error) <span class="cov7" title="7">
 		
 		<pre class="file" id="file2" style="display: none">package linescanner
 
+//Scan reads a line, and returns true when a complete line had been found.
+//If Scan did't find the end of line characters ('\n' or '\r\n'), and Scan
+//returns false.
+//Any previous token (line), and error can be read as long as Scan is returning
+// false.
+//A token is read via the Bytes() and Text methods, and the error is read via
+//the Err() method.
+//Scan supports reading sequential lines, but no indication or error is given
+//if the input ends without a final line end.
 func (ls *LineScanner) Scan() (hasToken bool) <span class="cov10" title="14">{
         var (
                 line     []byte

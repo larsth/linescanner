@@ -1,5 +1,14 @@
 package linescanner
 
+//Scan reads a line, and returns true when a complete line had been found.
+//If Scan did't find the end of line characters ('\n' or '\r\n'), and Scan
+//returns false.
+//Any previous token (line), and error can be read as long as Scan is returning
+// false.
+//A token is read via the Bytes() and Text methods, and the error is read via
+//the Err() method.
+//Scan supports reading sequential lines, but no indication or error is given
+//if the input ends without a final line end.
 func (ls *LineScanner) Scan() (hasToken bool) {
 	var (
 		line     []byte

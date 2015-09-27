@@ -1,5 +1,5 @@
 //Package linescanner is a Go package which reads a line to the end of the line,
-// not including the end of line characters in he token (search word: golang)
+// not including the end of line characters in the token(line).
 package linescanner
 
 import (
@@ -11,9 +11,10 @@ import (
 //LineScanner is a scanner/lexical analyzer that reads a line from
 //an io.Reader.
 //The end of line characters \n or \r\n is not included in the line (token).
-//You should continously loop in a loop until the Scan() method return true, or
-//the LineScanner has an error (io.EOF is never returned) from Err() method).
-//Then the Scan() method returns true a result is available until Scan returns
+//You should continously loop in until the Scan() method returns true, or
+//the LineScanner has an error. Read the error via the Err() method, which never
+//returns io.EOF.
+//When the Scan() method returns true a result is available until Scan returns
 //true again.
 //The result can be read via the Text(), or Bytes() methods.
 //
