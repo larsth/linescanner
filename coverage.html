@@ -81,7 +81,9 @@
 		</div>
 		<div id="content">
 		
-		<pre class="file" id="file0" >package linescanner
+		<pre class="file" id="file0" >//Package linescanner is a Go package which reads a line to the end of the line,
+// not including the end of line characters in he token (search word: golang)
+package linescanner
 
 import (
         "bufio"
@@ -89,6 +91,27 @@ import (
         "sync"
 )
 
+//LineScanner is a scanner/lexical analyzer that reads a line from
+//an io.Reader.
+//The end of line characters \n or \r\n is not included in the line (token).
+//You should continously loop in a loop until the Scan() method return true, or
+//the LineScanner has an error (io.EOF is never returned) from Err() method).
+//Then the Scan() method returns true a result is available until Scan returns
+//true again.
+//The result can be read via the Text(), or Bytes() methods.
+//
+//WARNING!: LineScanner does not limit the amount of memory that can be used
+//to buffer a line, so wrap your io.Reader in a io.LimitedReader to do
+//that. Then use the wrapped io.Reader (the io.LimitedReader) as the io.Reader
+//argument to the New() or NewSize() functions.
+//
+//A LineScanner, which is initialized like this:
+//
+//                &amp;linescanner.LineScanner{}
+//
+//... will not work correctly.
+//Any issue using LineScanner like this will be closed, because it is concidered
+//incorrect use of the LineScanner type.
 type LineScanner struct {
         mutex sync.Mutex
         r     *bufio.Reader
@@ -169,7 +192,8 @@ func NewSize(r io.Reader, readerCapacity int, tokenCapacity int, bufferCapacity 
 }
 
 func New(r io.Reader) (ls *LineScanner, err error) <span class="cov7" title="7">{
-        return NewSize(r, os.Getpagesize(), os.Getpagesize(), os.Getpagesize())
+        pageSize := os.Getpagesize()
+        return NewSize(r, pageSize, pageSize, pageSize)
 }</span>
 </pre>
 		

@@ -1,0 +1,9 @@
+PASS
+BenchmarkBytes-2         	 2000000	       724 ns/op
+BenchmarkErr-2           	 2000000	       707 ns/op
+BenchmarkNew-2           	   50000	     25538 ns/op
+BenchmarkNewSize-2       	 1000000	      2017 ns/op
+BenchmarkScan-2          	  500000	      3546 ns/op
+BenchmarkScanWithOutNew-2	 1000000	      1026 ns/op
+BenchmarkText-2          	 1000000	      1126 ns/op
+ok  	github.com/larsth/linescanner	11.900s
