@@ -1,7 +1,8 @@
-github.com/larsth/linescanner/linescanner.go:43:	Err		100.0%
-github.com/larsth/linescanner/linescanner.go:56:	Bytes		100.0%
-github.com/larsth/linescanner/linescanner.go:65:	Text		100.0%
+github.com/larsth/linescanner/linescanner.go:44:	Err		100.0%
+github.com/larsth/linescanner/linescanner.go:57:	Bytes		100.0%
+github.com/larsth/linescanner/linescanner.go:67:	Text		100.0%
+github.com/larsth/linescanner/linescanner.go:75:	ReadCount	0.0%
 github.com/larsth/linescanner/new.go:36:		NewSize		100.0%
 github.com/larsth/linescanner/new.go:66:		New		100.0%
 github.com/larsth/linescanner/scan.go:12:		Scan		100.0%
-total:							(statements)	100.0%
+total:							(statements)	94.2%

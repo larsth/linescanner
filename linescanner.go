@@ -31,12 +31,13 @@ import (
 //Any issue using LineScanner like this will be closed, because it is concidered
 //incorrect use of the LineScanner type.
 type LineScanner struct {
-	mutex sync.Mutex
-	r     *bufio.Reader
-	token []byte
-	buf   []byte
-	err   error
-	_     struct{}
+	mutex     sync.Mutex
+	r         *bufio.Reader
+	token     []byte
+	buf       []byte
+	err       error
+	readCount uint
+	_         struct{}
 }
 
 // Err returns the first non-io.EOF error that was encountered by the LineScanner.
@@ -57,6 +58,7 @@ func (ls *LineScanner) Bytes() []byte {
 	ls.mutex.Lock()
 	defer ls.mutex.Unlock()
 
+	ls.readCount += 1
 	return ls.token
 }
 
@@ -66,5 +68,13 @@ func (ls *LineScanner) Text() string {
 	ls.mutex.Lock()
 	defer ls.mutex.Unlock()
 
+	ls.readCount += 1
 	return string(ls.token)
+}
+
+func (ls *LineScanner) ReadCount() uint {
+	ls.mutex.Lock()
+	defer ls.mutex.Unlock()
+
+	return ls.readCount
 }

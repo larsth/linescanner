@@ -42,6 +42,7 @@ func (ls *LineScanner) Scan() (hasToken bool) {
 		ls.err = nil
 		if isPrefix == false {
 			hasToken = true
+			ls.readCount = uint(0)
 			//clear the token slice:
 			ls.token = ls.token[0:0:cap(ls.token)]
 			//Append the buffer slice, then the line slice, to the token slice:

@@ -54,7 +54,7 @@
 			<div id="nav">
 				<select id="files">
 				
-				<option value="file0">github.com/larsth/linescanner/linescanner.go (100.0%)</option>
+				<option value="file0">github.com/larsth/linescanner/linescanner.go (81.2%)</option>
 				
 				<option value="file1">github.com/larsth/linescanner/new.go (100.0%)</option>
 				
@@ -114,12 +114,13 @@ import (
 //Any issue using LineScanner like this will be closed, because it is concidered
 //incorrect use of the LineScanner type.
 type LineScanner struct {
-        mutex sync.Mutex
-        r     *bufio.Reader
-        token []byte
-        buf   []byte
-        err   error
-        _     struct{}
+        mutex     sync.Mutex
+        r         *bufio.Reader
+        token     []byte
+        buf       []byte
+        err       error
+        readCount uint
+        _         struct{}
 }
 
 // Err returns the first non-io.EOF error that was encountered by the LineScanner.
@@ -140,6 +141,7 @@ func (ls *LineScanner) Bytes() []byte <span class="cov1" title="1">{
         ls.mutex.Lock()
         defer ls.mutex.Unlock()
 
+        ls.readCount += 1
         return ls.token
 }</span>
 
@@ -149,7 +151,15 @@ func (ls *LineScanner) Text() string <span class="cov1" title="1">{
         ls.mutex.Lock()
         defer ls.mutex.Unlock()
 
+        ls.readCount += 1
         return string(ls.token)
+}</span>
+
+func (ls *LineScanner) ReadCount() uint <span class="cov0" title="0">{
+        ls.mutex.Lock()
+        defer ls.mutex.Unlock()
+
+        return ls.readCount
 }</span>
 </pre>
 		
@@ -268,6 +278,7 @@ func (ls *LineScanner) Scan() (hasToken bool) <span class="cov10" title="14">{
                 ls.err = nil
                 if isPrefix == false </span><span class="cov7" title="7">{
                         hasToken = true
+                        ls.readCount = uint(0)
                         //clear the token slice:
                         ls.token = ls.token[0:0:cap(ls.token)]
                         //Append the buffer slice, then the line slice, to the token slice:
