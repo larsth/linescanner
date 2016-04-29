@@ -1,9 +1,9 @@
 PASS
-BenchmarkBytes-2         	 2000000	       710 ns/op
-BenchmarkErr-2           	 2000000	       701 ns/op
-BenchmarkNew-2           	   50000	     26906 ns/op
-BenchmarkNewSize-2       	  500000	      2689 ns/op
-BenchmarkScan-2          	  500000	      3714 ns/op
-BenchmarkScanWithOutNew-2	 1000000	      1030 ns/op
-BenchmarkText-2          	 1000000	      1061 ns/op
-ok  	github.com/larsth/linescanner	11.496s
+BenchmarkBytes-2         	 2000000	       746 ns/op
+BenchmarkErr-2           	 2000000	       729 ns/op
+BenchmarkNew-2           	   50000	     29598 ns/op
+BenchmarkNewSize-2       	 1000000	      2266 ns/op
+BenchmarkScan-2          	  500000	      4294 ns/op
+BenchmarkScanWithOutNew-2	 1000000	      1178 ns/op
+BenchmarkText-2          	 1000000	      1205 ns/op
+ok  	github.com/larsth/linescanner	13.270s

@@ -1,5 +1,7 @@
 package linescanner
 
+import "io"
+
 //Scan reads a line, and returns true when a complete line had been found.
 //If Scan did't find the end of line characters ('\n' or '\r\n'), and Scan
 //returns false.
@@ -58,5 +60,6 @@ func (ls *LineScanner) Scan() (hasToken bool) {
 	if err != nil {
 		ls.err = err
 	}
+	ls.hasEof = (err == io.EOF)
 	return
 }

@@ -37,7 +37,15 @@ type LineScanner struct {
 	buf       []byte
 	err       error
 	readCount uint
-	_         struct{}
+	hasEof bool
+}
+
+//HasEof returns wether or not the error is a io.EOF
+func (ls *LineScanner) HasEof() bool {
+	ls.mutex.Lock()
+	defer ls.mutex.Unlock()
+	
+	return ls.hasEof
 }
 
 // Err returns the first non-io.EOF error that was encountered by the LineScanner.
